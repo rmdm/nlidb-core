@@ -1,0 +1,8 @@
+{
+  "name": "nlidb-core",
+  "version": "0.1.0",
+  "dependencies": {
+    "dyn-chain": "git://github.com/rmdm/dyn-chain"
+  },
+  "main": "lib/nlidb-core.js"
+}
