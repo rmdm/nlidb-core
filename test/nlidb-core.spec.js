@@ -1,6 +1,6 @@
 describe('A NLIDB core functionality', function(){
   
-  var nlidb = require('../lib/nlidb-core');
+  var NlidbCore = require('../lib/nlidb-core');
   
   /*
   Parse tree extended with semantic information from thesaurus
@@ -32,7 +32,8 @@ describe('A NLIDB core functionality', function(){
   var struc_rep = [[{rel:'B', def: 'b', kvf: [{k: 'b', v: 'b'}]}],[{rel: 'A', kvf: [{k: 'ab', v: 'ab'}, {k: 'a', v: 'a'}]}]];
   
   it('has its main function - minimize - that transforms natural language query into strucured representation', function(){
-    var minimized = nlidb.exec('minimize', [tree]);
+    var nlidb = new NlidbCore();
+    var minimized = nlidb.process(tree);
     expect(minimized.length).toBe(2);
     expect(minimized[0].length).toBe(1);
     expect(minimized[1].length).toBe(1);
@@ -43,11 +44,11 @@ describe('A NLIDB core functionality', function(){
     expect(minimized[0][0].kvf[0].f).not.toBeDefined();
     expect(minimized[1][0].rel).toBe('A');
     expect(minimized[1][0].kvf.length).toBe(2);
-    expect(minimized[1][0].kvf[0].k).toBe('ab');
-    expect(minimized[1][0].kvf[0].v).toBe('ab');
+    expect(minimized[1][0].kvf[0].k).toBe('a');
+    expect(minimized[1][0].kvf[0].v).toBe('a');
     expect(minimized[1][0].kvf[0].f).not.toBeDefined();
-    expect(minimized[1][0].kvf[1].k).toBe('a');
-    expect(minimized[1][0].kvf[1].v).toBe('a');
+    expect(minimized[1][0].kvf[1].k).toBe('ab');
+    expect(minimized[1][0].kvf[1].v).toBe('ab');
     expect(minimized[1][0].kvf[1].f).not.toBeDefined();
   });
   
