@@ -92,14 +92,20 @@ describe('rutil', function () {
     expect(rutil.mergeIfOneIsFunctional(rel3, rel2)).not.toBe(undefined);
   });
   
-  it('has "oneIsFunc" merging first non-functional rel with second functional', function () {
-    var rel1 = {rel: 'F', kvf: [{f: ['func1']}]};
-    var rel2 = {rel: 'F', kvf: [{f: ['func2']}]};
-    var rel3 = {rel: 'N', kvf: [{k: 'k1', v: 'v1'}]};
+  it('has "rightIsFunc" merging first non-functional rel with second functional', function () {
+    var rel1 = {rel: 'F', kvf: [{f: ['func2']}]};
+    var rel2 = {rel: 'N', kvf: [{k: 'k1', v: 'v1'}]};
     
-    expect(rutil.oneIsFunc(rel1, rel2)).toBe(undefined);
-    expect(rutil.oneIsFunc(rel1, rel3)).toBe(undefined);
-    expect(rutil.oneIsFunc(rel3, rel1)).not.toBe(undefined);
+    expect(rutil.rightIsFunc(rel1, rel2)).toBe(undefined);
+    expect(rutil.rightIsFunc(rel2, rel1)).not.toBe(undefined);
+  });
+  
+  it('has "leftIsFunc" merging first non-functional rel with second functional', function () {
+    var rel1 = {rel: 'F', kvf: [{f: ['func2']}]};
+    var rel2 = {rel: 'N', kvf: [{k: 'k1', v: 'v1'}]};
+    
+    expect(rutil.leftIsFunc(rel1, rel2)).not.toBe(undefined);
+    expect(rutil.leftIsFunc(rel2, rel1)).toBe(undefined);
   });
   
 });
