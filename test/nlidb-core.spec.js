@@ -1,6 +1,7 @@
 describe('A NLIDB core functionality', function(){
   
   var NlidbCore = require('../lib/nlidb-core');
+  var sameArr = require('../lib/rutil').sameArr;
   
   /*
   Parse tree extended with semantic information from thesaurus
@@ -33,7 +34,7 @@ describe('A NLIDB core functionality', function(){
     if (Array.isArray(value)) {
       var i = kvf.length;
       for (; i--;) {
-        if (require('../lib/rutil').sameArr(value, kvf[i][what])) {
+        if (sameArr(value, kvf[i][what])) {
           contains = true;
           break;
         }
@@ -164,6 +165,54 @@ describe('A NLIDB core functionality', function(){
       expectKvfContains(res.kvf, 'k', 'k1');
       expectKvfContains(res.kvf, 'v', 'v2');
       expectKvfContains(res.kvf, 'f', ['f2', 'f1']);
+      
+      var rel1 = {rel: 'A', kvf: [{k: 'k1', v: 'v2', f: ['f1']}]};
+      var rel2 = {rel: 'A', kvf: [{k: 'k1', v: 'v2', f: ['f2']}]};
+      var res = nlidb.mergeRels(rel1, rel2);
+      expect(res.kvf.length).toBe(1);
+      expectKvfContains(res.kvf, 'k', 'k1');
+      expectKvfContains(res.kvf, 'v', 'v2');
+      expectKvfContains(res.kvf, 'f', ['f2', 'f1']);
+      
+      var rel1 = {rel: 'A', kvf: [{k: 'k1', v: 'v1', f: ['f1']}]};
+      var rel2 = {rel: 'A', kvf: [{k: 'k1', v: 'v2', f: ['f2']}]};
+      var res = nlidb.mergeRels(rel1, rel2);
+      expect(res.kvf.length).toBe(2);
+      expectKvfContains(res.kvf, 'k', 'k1');
+      expectKvfContains(res.kvf, 'k', 'k1');
+      expectKvfContains(res.kvf, 'v', 'v1');
+      expectKvfContains(res.kvf, 'v', 'v2');
+      expectKvfContains(res.kvf, 'f', ['f1']);
+      expectKvfContains(res.kvf, 'f', ['f2']);
+      
+      var rel1 = {rel: 'A', kvf: [{k: 'k1', v: 'v1'}]};
+      var rel2 = {rel: 'A', kvf: [{k: 'k1', v: 'v2', f: ['f2']}]};
+      var res = nlidb.mergeRels(rel1, rel2);
+      expect(res.kvf.length).toBe(2);
+      expectKvfContains(res.kvf, 'k', 'k1');
+      expectKvfContains(res.kvf, 'v', 'v1');
+      expectKvfContains(res.kvf, 'v', 'v2');
+      expectKvfContains(res.kvf, 'f', ['f2']);
+      expectKvfContains(res.kvf, 'f', undefined);
+      
+      var rel1 = {rel: 'A', kvf: [{k: 'k1', v: 'v1'}]};
+      var rel2 = {rel: 'A', kvf: [{k: 'k1', v: 'v2', f: ['f2']}]};
+      var res = nlidb.mergeRels(rel1, rel2);
+      expect(res.kvf.length).toBe(2);
+      expectKvfContains(res.kvf, 'k', 'k1');
+      expectKvfContains(res.kvf, 'k', 'k1');
+      expectKvfContains(res.kvf, 'v', 'v1');
+      expectKvfContains(res.kvf, 'v', 'v2');
+      expectKvfContains(res.kvf, 'f', ['f2']);
+      expectKvfContains(res.kvf, 'f', undefined);
+      
+      var rel1 = {rel: 'A', kvf: [{k: 'k1', v: 'v1'}]};
+      var rel2 = {rel: 'A', kvf: [{k: 'k1', v: 'v1', f: ['f2']}]};
+      var res = nlidb.mergeRels(rel1, rel2);
+      expect(res.kvf.length).toBe(1);
+      expectKvfContains(res.kvf, 'k', 'k1');
+      expectKvfContains(res.kvf, 'v', 'v1');
+      expectKvfContains(res.kvf, 'f', ['f2']);
     });
     
   });
