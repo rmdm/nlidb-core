@@ -1,8 +1,23 @@
 {
   "name": "nlidb-core",
-  "version": "0.1.0",
-  "dependencies": {
-    "dyn-chain": "git://github.com/rmdm/dyn-chain"
+  "version": "0.2.0",
+  "description": "Core NLIDB functionality",
+  "main": "lib/nlidb-core.js",
+  "directories": {
+    "test": "test"
   },
-  "main": "lib/nlidb-core.js"
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/rmdm/nlidb-core"
+  },
+  "keywords": [
+    "nlidb",
+    "nlp"
+  ],
+  "author": "Dmitry Rumyantsev",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rmdm/nlidb-core/issues"
+  },
+  "homepage": "https://github.com/rmdm/nlidb-core"
 }
