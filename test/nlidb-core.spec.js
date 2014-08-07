@@ -78,17 +78,64 @@ describe('A NLIDB core functionality', function(){
     expectKvfContains(minimized[1][0].kvf, 'f', undefined);
   });
   
-  describe('isLinear method', function () {
+  it('"process" should always return 2d array', function(){    
+    
+    function is2D (arr) {
+      expect(Array.isArray(arr) && Array.isArray(arr[0])).toBe(true);
+    }
+    
+    is2D(nlidb.process([]));
+    is2D(nlidb.process([[]]));
+    is2D(nlidb.process(null));
+    is2D(nlidb.process(undefined));
+    is2D(nlidb.process(0));
+    is2D(nlidb.process(function () {}));
+    is2D(nlidb.process([1]));
+    is2D(nlidb.process({}));
+    is2D(nlidb.process({isLeaf: true, occurs: [{rel: 'A', kvf: []}]}));
+    is2D(nlidb.process({occurs: [{}]}));
+    is2D(nlidb.process({isLeaf: true}));
+    is2D(nlidb.process([{}, {}, {}]));
+    is2D(nlidb.process([{e: [{}]}]));
+    
+  });
+  
+  it('static "isEmpty" checks meaning of results', function(){    
+    
+    function isEmpty (stuff, shouldBe) {
+      expect(NlidbCore.isEmpty(stuff)).toBe(shouldBe);
+    }
+    
+    isEmpty(nlidb.process([]), true);
+    isEmpty(nlidb.process([[]]), true);
+    isEmpty(nlidb.process(null), true);
+    isEmpty(nlidb.process(undefined), true);
+    isEmpty(nlidb.process(0), true);
+    isEmpty(nlidb.process(function () {}), true);
+    isEmpty(nlidb.process([1]), true);
+    isEmpty(nlidb.process({}), true);
+    isEmpty(nlidb.process({occurs: [{}]}), true);
+    isEmpty(nlidb.process({isLeaf: true}), true);
+    isEmpty(nlidb.process([{}, {}, {}]), true);
+    isEmpty(nlidb.process([{e: [{}]}]), true);
+    
+    //at least one element of tree should have both "isLeaf" and "occurs" properties
+    isEmpty(nlidb.process({isLeaf: true, occurs: [{rel: 'A', kvf: []}]}), false);
+    isEmpty(nlidb.process([{e: [{},{isLeaf: true, occurs: [{rel: 'A', kvf: []}]}]}]), false);
+    
+  });
+  
+  describe('lastLeafInLinearTree method', function () {
   
     it('used to define if tree has linear structure', function () {
       var tree = {e: {isLeaf: true}};
-      expect(!!nlidb.isLinear(tree)).toBe(true);
+      expect(!!nlidb.lastLeafInLinearTree(tree)).toBe(true);
       
       var tree = {e: {e: {e: {e: {e: {isLeaf: true}}}}}};
-      expect(!!nlidb.isLinear(tree)).toBe(true);
+      expect(!!nlidb.lastLeafInLinearTree(tree)).toBe(true);
       
       var tree = {e: [{isLeaf: true}, {isLeaf: true}]};
-      expect(!!nlidb.isLinear(tree)).toBe(false);    
+      expect(!!nlidb.lastLeafInLinearTree(tree)).toBe(false);    
     });
     
   });
