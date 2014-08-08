@@ -93,6 +93,7 @@ describe('A NLIDB core functionality', function(){
     is2D(nlidb.process([1]));
     is2D(nlidb.process({}));
     is2D(nlidb.process({isLeaf: true, occurs: [{rel: 'A', kvf: []}]}));
+    is2D(nlidb.process({isLeaf: true, occurs: []}));
     is2D(nlidb.process({occurs: [{}]}));
     is2D(nlidb.process({isLeaf: true}));
     is2D(nlidb.process([{}, {}, {}]));
@@ -114,12 +115,13 @@ describe('A NLIDB core functionality', function(){
     isEmpty(nlidb.process(function () {}), true);
     isEmpty(nlidb.process([1]), true);
     isEmpty(nlidb.process({}), true);
+    isEmpty(nlidb.process({isLeaf: true, occurs: []}), true);
     isEmpty(nlidb.process({occurs: [{}]}), true);
     isEmpty(nlidb.process({isLeaf: true}), true);
     isEmpty(nlidb.process([{}, {}, {}]), true);
     isEmpty(nlidb.process([{e: [{}]}]), true);
     
-    //at least one element of tree should have both "isLeaf" and "occurs" properties
+    //at least one element of tree should have both "isLeaf" and non-empty array "occurs" properties
     isEmpty(nlidb.process({isLeaf: true, occurs: [{rel: 'A', kvf: []}]}), false);
     isEmpty(nlidb.process([{e: [{},{isLeaf: true, occurs: [{rel: 'A', kvf: []}]}]}]), false);
     
@@ -152,7 +154,7 @@ describe('A NLIDB core functionality', function(){
       expect(res.length).toBe(1);
       expect(res[0].rel).toBe('A');
       
-      expect(nlidb.minimize([])).toBe(null);
+      expect(nlidb.minimize([]).length).toBe(0);
     });
   
   });
